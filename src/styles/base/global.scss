@@ -1,0 +1,32 @@
+@use "variables" as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+.header {
+  background-color: var(--white);
+  border-bottom: var(--border-size-1) solid var(--black);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: var(--size-2) var(--size-3);
+  width: 100%;
+}
+
+.footer {
+  border-top: var(--border-size-1) solid var(--black);
+  background-color: var(--white);
+  padding: var(--size-2) var(--size-3);
+  text-align: center;
+
+  @media (min-width: $breakpoint-sm) {
+    text-align: left;
+  } 
+}

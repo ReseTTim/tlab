@@ -1,0 +1,16 @@
+@use "../base/variables" as *;
+
+@mixin container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 var(--size-3);
+
+  @media (min-width: $breakpoint-md) {
+    padding: 0 5%;
+    max-width: 1100px;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    margin: 0 auto;
+  }
+}

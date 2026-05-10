@@ -1,0 +1,79 @@
+@use "./variables" as *;
+
+body {
+  font-family: var(--font-rounded-sans);
+  font-size: 100%;
+  font-weight: var(--font-weight-4);
+  line-height: var(--font-lineheight-1);
+  color: var(--black);
+}
+
+p {
+  font-size: var(--font-size-2);
+  margin-bottom: 1rem;
+
+  @media (min-width: $breakpoint-md) {
+    font-size: var(--font-size-1);
+  }
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-industrial);
+  margin: 0 0 0.5rem;
+}
+
+h1, .h1 {
+  font-size: var(--font-size-5);
+  font-weight: var(--font-weight-7);
+  line-height: var(--font-lineheight-1);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-3);
+  font-weight: var(--font-weight-4);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-2);
+  font-weight: var(--font-weight-4);
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.4s ease;
+  user-select: none;
+
+  img {
+    border: 0;
+  }
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+b, strong {
+  font-weight: var(--font-weight-7);
+}
+
+small {
+  font-size: var(--font-size-0);
+}
+
+em {
+  font-style: italic;
+  font-size: var(--font-size-0);
+}
+
+.text-center { 
+  text-align: center;
+}
+
+.icon {
+  fill: currentColor;
+  height: var(--size-4);
+  width: var(--size-4);
+}
