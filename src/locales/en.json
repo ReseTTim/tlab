@@ -27,6 +27,7 @@
   "search.button": "Search",
   "search.error": "Minimum of 3 characters are required",
   "results.header": "Search results",
+  "results.loading": "Loading",
   "results.subheader": "searched for",
   "results.no-results": "No results found, please change your term",
   "visit": "Visit",
@@ -52,5 +53,9 @@
   "show-info.language": "Language",
   "show-info.visitOfficialPage": "Visit page",
   "shows.navigation-left-btn": "Scroll to left",
-  "shows.navigation-right-btn": "Scroll to right"
+  "shows.navigation-right-btn": "Scroll to right",
+  "sort-by.label": "Sort shows by",
+  "sort-by.alphabetical": "Alphabetical",
+  "sort-by.highestRating": "Highest rating",
+  "sort-by.none": "Unsorted"
 }

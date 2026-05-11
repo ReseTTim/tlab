@@ -14,7 +14,6 @@ export default class storageHelper {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (_error) {
-      console.log('localStorage not defined')
       // user doesn't need to know about this, just fail silently 
     }
   }

@@ -5,9 +5,12 @@
       data-testid="link">
       <span class="sr-only">{{ `${$t('visit')}: ${name}` }}</span>
     </router-link>
-    <figure class="show-card__cover" data-testid="cover">
+
+    <figure v-if="image?.medium" class="show-card__cover" data-testid="cover">
       <img :src="image?.medium" :alt="name" />
     </figure>
+    <div v-else class="show-card__title h3">{{ name }}</div>
+
     <Rating v-if="rating?.average" :value="rating.average" valueOnly isSmall  />
   </article>
 </template>
@@ -52,6 +55,7 @@ export default {
 <style lang="scss" scoped>
   .show-card {
     width: var(--showcard-width);
+    height: 100%;
     padding: 0 var(--size-px-1);
     box-shadow: var(--shadow-2);
     position: relative;
@@ -74,10 +78,19 @@ export default {
     
     &__cover {
       width: 100%;
-
+      height: 100%;
+      
       img {
         width: 100%;
       }
+    }
+
+    &__title {
+      background-color: var(--color-1);
+      text-align: center;
+      margin: 0;
+      height: 100%;
+      padding: var(--size-5);
     }
 
     .rating {

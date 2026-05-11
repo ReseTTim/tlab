@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue';
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, vi } from "vitest";
 import userEvent from '@testing-library/user-event';
 
 import Search from './search.vue';
@@ -7,6 +7,10 @@ import { useUIStore } from '@/stores/ui';
 
 import { createPinia, setActivePinia } from 'pinia';
 import { i18n } from '@/plugins/i18n';
+
+vi.mock('@/api/tvmaze/search', () => ({
+  getShowsByTerm: vi.fn((query) => [])
+}));
 
 const pinia = createPinia();
 

@@ -58,27 +58,6 @@ describe('Shows store', () => {
     expect(results[1].name).toBe('Dark');
   });
 
-  it('Searches by title', () => {
-    const store = useShowsStore();
-
-    store.shows = mockShows;
-
-    const results = store.searchResults('dark');
-
-    expect(results).toHaveLength(1);
-    expect(results[0].name).toBe('Dark');
-  });
-
-  it('Searches by genre', () => {
-    const store = useShowsStore();
-
-    store.shows = mockShows;
-
-    const results = store.searchResults('fantasy');
-
-    expect(results).toHaveLength(2);
-  });
-
   it('Returns related shows without show duplications', () => {
     const store = useShowsStore();
 

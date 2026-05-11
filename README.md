@@ -119,23 +119,30 @@ Shows are cached locally to reduce unnecessary API requests and improve perceive
 Filtering and grouping logic are centralized within the store layer to reduce duplicated computations across components.
 
 ## Search functionality
+Search functionality makes use of the TVmaze API. Search results are cached in localStorage per query for 24 hours to reduce unnecessary API requests and improve perceived responsiveness for repeated searches.
 
-The search experience is designed to provide filtering based on available data.
+A minimum query length of 3 characters is required before triggering a search request. This helps reduce unnecessary API calls, improves result relevance, and avoids excessive network requests during typing.
 
 Search behavior includes:
-* displays an error message when the search contains fewer than 3 characters 
-* reactive filtering
-
-  * filter on `name`
-  * or `genre`
-  * or `summary`
-
+* displaying an error message when the search contains fewer than 3 characters
 * accessible keyboard shortcuts
 
   * Focus on search field (`Cmd + K` / `Ctrl + K`)
   * Close search results (`Escape`)
 
-Search-related logic is centralized within the store layer to avoid duplicated filtering behavior across components and improve maintainability.
+Search-related logic is centralized within the store layer to:
+
+* avoid duplicated filtering behavior across components
+* simplify maintenance and testing
+* keep components focused on presentation responsibilities
+* provide a single source of truth for search state and behavior
+
+Search results are normalized before entering application state to keep component rendering predictable and reduce transformation logic within the UI layer.
+
+## Sorting functionality
+Feature is to implement on later stage lazy loading of more shows. When shows are already sorted it looks `Quirky` when new shows are added. This is also not intuetive, my recommandation is to load the first 1000 shows (4 pages).
+
+Additional sorting strategies can be added to `showHelper` without requiring changes to the store.
 
 ## Show Detail
 

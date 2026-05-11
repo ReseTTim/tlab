@@ -19,9 +19,6 @@ export const useUIStore = defineStore('ui', {
     setSearchTerm(term) {
       this.searchTerm = encodeURIComponent(term.toLowerCase());
     },
-    clearSearchTerm () {
-      this.searchTerm = '';
-    },
     setErrorMessage (message) {
       this.errorMessage = message;
 

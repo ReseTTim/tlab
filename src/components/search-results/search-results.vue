@@ -1,6 +1,10 @@
 <template>
   <div class="search-results" v-if="hasValidSearchTerm">
-    <Shows v-if="searchResults.length > 0"
+    <div v-if="isLoading" class="container search-results__container">
+      <p>{{ $t('results.loading')}}&hellip;</p>
+    </div>
+
+    <Shows v-else-if="searchResults.length > 0"
       :shows="searchResults">
       <h2>{{ `${$t('results.header')} (${searchResults.length})` }}</h2>
       <h3>{{ `${$t('results.subheader')} '${searchTerm}'` }}</h3>
@@ -12,7 +16,7 @@
     </div>
 
     <button class="search-results__close" :aria-label="$t('close')"
-        @click.prevent="ui.clearSearchTerm()">&times;</button>
+        @click.prevent="close">&times;</button>
   </div>
 </template>
 
@@ -46,7 +50,10 @@
         return this.ui.hasValidSearchTerm || false;
       },
       searchResults () {
-        return this.hasValidSearchTerm ? this.store.searchResults(this.searchTerm) : [];
+        return this.store.results;
+      },
+      isLoading () {
+        return this.store.isLoading || false;
       },
       searchTerm () {
         return this.hasValidSearchTerm ? this.ui.searchTerm : '';
@@ -55,8 +62,12 @@
     methods: {
       onEscape (event) {
         if (event.key === 'Escape') {
-          this.ui.clearSearchTerm();
+          this.close();
         }
+      },
+      close () {
+        this.ui.searchTerm = '';
+        this.store.results = [];
       },
     },
     components: {

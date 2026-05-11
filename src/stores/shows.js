@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia';
 import storageHelper from '@/helpers/localStorageHelper';
-import { highestRatingFirst } from '@/helpers/showHelper';
+import { highestRatingFirst, sortShows, SORTERS } from '@/helpers/showHelper';
 
 import { getAllShowsPerPage, getShowById } from '@/api/tvmaze/shows';
+import { getShowsByTerm } from '@/api/tvmaze/search';
 
 const storage = new storageHelper();
 const ttl = 24 * 60 * 60 * 1000; // Cache for 24 hours
 
 export const useShowsStore = defineStore('shows', {
   state: () => ({
+    isLoading: false,
     shows: [],
     singleShow: null,
+    results: [],
+    sortBy: 'highestRating',
     genres: [],
   }),
   getters: {
@@ -23,32 +27,21 @@ export const useShowsStore = defineStore('shows', {
       };
     },
     byGenre: (state) => {
-      return (genre) => {
-        return state.shows
-          .filter(show => show.genres.includes(genre))
-          .sort(highestRatingFirst);
-      }
-    },
-    searchResults: (state) => {
-      const matchTerm = (term, show) => {
-        return show.name.toLowerCase().includes(term)
-        || new Set(show.genres).has(term)
-        || show.summary.toLowerCase().includes(term);
-      };
-
-      return (term) => {
-        return state.shows
-          .filter(show => matchTerm(term, show))
-          .sort(highestRatingFirst);
+      return (genre, sortBy) => {
+        return sortShows(
+          state.shows.filter(show => show.genres.includes(genre))
+          , sortBy || state.sortBy);
       }
     },
     showsWithSameGenre: (state) => {
+      const sortBy = 'highestRating';
+
       return function ({ id, genres }) {
         const maxRelatedShows = 10;
         const relatedShows = new Map();
 
         for (const genre of genres || []) {
-          const shows = this.byGenre(genre).filter((show) => show.id !== id);
+          const shows = this.byGenre(genre, sortBy).filter((show) => show.id !== id);
 
           for (const show of shows) {
             // Only add unique show  
@@ -68,7 +61,8 @@ export const useShowsStore = defineStore('shows', {
           }
         }
 
-        return [...relatedShows.values()];
+        // sort complete collection
+        return sortShows([...relatedShows.values()], sortBy);
       };
     },
   },
@@ -105,6 +99,27 @@ export const useShowsStore = defineStore('shows', {
         storage.setWithExpiry(cacheRoute, show, ttl);
       }
     },
+    async getShowsByQuery(query) {
+      this.isLoading = true;
+
+      const cacheRoute = `/search/${query}`;
+      const cachedQuery = storage.get(cacheRoute);
+      if (cachedQuery) {
+        this.results = cachedQuery;
+        this.isLoading = false;
+        return;
+      }
+
+      const results = await getShowsByTerm(query);
+      if (results) {
+        const r = [];
+        results.forEach(result => r.push({...result.show, score: result.score}));
+        this.results = r;
+        this.isLoading = false;
+        // update local storage cache with the new show added
+        storage.setWithExpiry(cacheRoute, r, ttl);
+      }
+    },
     updateGenres (genres) {
       if (!genres || !Array.isArray(genres) || genres.length === 0) {
         return;
@@ -136,5 +151,13 @@ export const useShowsStore = defineStore('shows', {
 
       return false;
     },
+    updateSortBy (sort) {
+      if (!Object.keys(SORTERS).includes(sort)) {
+        // sorting type does not exists, don't change
+        return;
+      }
+
+      this.sortBy = sort;
+    }
   },
 });

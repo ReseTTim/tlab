@@ -25,12 +25,14 @@
 
 <script>
 import { useUIStore } from '@/stores/ui';
+import { useShowsStore } from '@/stores/shows';
 
 export default {
   name: 'Search',
   data() {
     return {
       ui: useUIStore(),
+      store: useShowsStore(),
       query: this.ui?.searchTerm || '',
     };
   },
@@ -38,6 +40,7 @@ export default {
     onSubmit() {
       if (this.query.trim().length === 0 || this.query.trim().length >= 3) {
         this.ui.setSearchTerm(this.query.trim());
+        this.store.getShowsByQuery(this.query.trim());
         return;
       }
       
